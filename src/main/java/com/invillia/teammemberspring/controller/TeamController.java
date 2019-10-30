@@ -30,12 +30,12 @@ public class TeamController {
         return "team/teams";
     }
 
-    @GetMapping("/add-team")
+    @GetMapping("/add")
     public String showNewTeam(Team team) {
         return "team/add-team";
     }
 
-    @PostMapping("/saveteam")
+    @PostMapping("/save")
     public String saveTeam(@Valid Team team, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "team/add-team";
@@ -51,5 +51,24 @@ public class TeamController {
         Team team = teamService.findById(id);
         model.addAttribute("team", team);
         return "team/update-team";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateTeam(@PathVariable("id") long id, @Valid Team team, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            team.setId(id);
+            return "team/update-team";
+        }
+
+        teamService.update(team);
+        model.addAttribute("teams", teamService.findAll());
+        return "team/teams";
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteTeam(@PathVariable("id") long id, Model model) {
+        teamService.delete(id);
+        model.addAttribute("teams", teamService.findAll());
+        return "team/teams";
     }
 }

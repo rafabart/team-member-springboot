@@ -2,11 +2,9 @@ package com.invillia.teammemberspring.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+
 
 @Data
 @Entity
@@ -21,6 +19,6 @@ public class Member extends IdAbstract<Long> {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @NotBlank(message = "O time é obrigatório!")
+//    @NotBlank(message = "O time é obrigatório!")
     private Team team;
 }

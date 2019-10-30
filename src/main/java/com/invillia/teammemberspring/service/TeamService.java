@@ -22,9 +22,13 @@ public class TeamService {
     }
 
     public void update(Team team) {
-        Team teamTemp = teamRepository.getOne(team.getId());
-        team.setCreatedAt(teamTemp.getCreatedAt());
-        teamRepository.save(team);
+        Team teamTemp = teamRepository.findById(team.getId()).get();
+        try {
+            team.setMembers(teamTemp.getMembers());
+        } finally {
+            team.setCreatedAt(teamTemp.getCreatedAt());
+            teamRepository.save(team);
+        }
     }
 
     public void delete(Long id) {
