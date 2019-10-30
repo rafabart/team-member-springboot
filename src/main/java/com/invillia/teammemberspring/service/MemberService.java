@@ -23,7 +23,13 @@ public class MemberService {
     }
 
     public void update(Member member) {
-        memberRepository.save(member);
+        Member memberTemp = memberRepository.findById(member.getId()).get();
+        try {
+//            member.setTeam(memberTemp.getTeam());
+            member.setCreatedAt(memberTemp.getCreatedAt());
+        } finally {
+            memberRepository.save(member);
+        }
     }
 
     public void delete(Long id) {

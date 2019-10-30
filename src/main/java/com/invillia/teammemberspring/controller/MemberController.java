@@ -43,9 +43,6 @@ public class MemberController {
 
     @PostMapping("/save")
     public String saveMember(@Valid Member member, BindingResult result, Model model) {
-        System.out.println(member.getName());
-        System.out.println(member.getTeam());
-
         if (result.hasErrors()) {
             return "member/add-member";
         }
@@ -58,6 +55,7 @@ public class MemberController {
     @GetMapping("/edit/{id}")
     public String showEditMember(@PathVariable("id") long id, Model model) {
         Member member = memberService.findById(id);
+        model.addAttribute("teams", teamService.findAll());
         model.addAttribute("member", member);
         return "member/update-member";
     }

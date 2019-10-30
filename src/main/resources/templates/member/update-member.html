@@ -3,21 +3,32 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Atualizar Time</title>
+    <title>Atualizar Membro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 </head>
 <body>
 <div class="container my-5">
-    <h2 class="mb-5">Atualizar Time</h2>
+    <h2 class="mb-5">Atualizar Membro</h2>
     <div class="row">
         <div class="col-md-6">
-            <form action="#" th:action="@{/team/update/{id}(id=${team.id})}" th:object="${team}" method="post">
+            <form action="#" th:action="@{/member/update/{id}(id=${member.id})}" th:object="${member}" method="post">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="name" class="col-form-label">Nome</label>
                         <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Name">
+                        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="teamSelect">Time</label>
+                        <select class="form-control" id="teamSelect" th:field="*{team.id}">
+                            <option th:each="team : ${teams}" th:value="${team.id}"
+                                    th:text="${team.name}" >
+                            </option>
+                        </select>
                         <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
                     </div>
                 </div>

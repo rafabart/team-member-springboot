@@ -17,7 +17,8 @@ public class Member extends IdAbstract<Long> {
     @NotBlank(message = "O nome é obrigatório!")
     private String name;
 
-    @ManyToOne
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
 //    @NotBlank(message = "O time é obrigatório!")
     private Team team;

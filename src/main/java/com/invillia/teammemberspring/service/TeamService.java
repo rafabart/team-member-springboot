@@ -25,8 +25,8 @@ public class TeamService {
         Team teamTemp = teamRepository.findById(team.getId()).get();
         try {
             team.setMembers(teamTemp.getMembers());
-        } finally {
             team.setCreatedAt(teamTemp.getCreatedAt());
+        } finally {
             teamRepository.save(team);
         }
     }
