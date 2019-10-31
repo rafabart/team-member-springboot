@@ -25,10 +25,6 @@ public class TeamController {
 
     @GetMapping("/")
     public String findAll(Model model) {
-        List<Team> teams = teamService.findAll();
-        for (Team t : teams) {
-            System.out.println(t.getMembers());
-        }
         model.addAttribute("teams", teamService.findAll());
         return "team/teams";
     }

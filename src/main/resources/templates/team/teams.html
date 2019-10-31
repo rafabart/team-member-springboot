@@ -11,6 +11,23 @@
           integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
+    <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item mr-4">
+                <a class="nav-link h4 font-weight-bold" th:href="@{/}">Home</a>
+            </li>
+            <li class="nav-item mr-4">
+                <a class="nav-link h4  font-weight-bold" th:href="@{/team/}">Times</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link h4 font-weight-bold" th:href="@{/member/}">Membros</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 <div th:switch="${teams}" class="container my-5">
     <div class="row">
         <div class="col-md-12">
