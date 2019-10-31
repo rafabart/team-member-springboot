@@ -25,6 +25,7 @@ public class TeamController {
 
     @GetMapping("/")
     public String findAll(Model model) {
+        List<Team> teams = teamService.findAll();
         model.addAttribute("teams", teamService.findAll());
         return "team/teams";
     }
@@ -39,10 +40,8 @@ public class TeamController {
         if (result.hasErrors()) {
             return "team/add-team";
         }
-
         teamService.save(team);
-        model.addAttribute("teams", teamService.findAll());
-        return "team/teams";
+        return "redirect:/team/";
     }
 
     @GetMapping("/edit/{id}")
@@ -59,15 +58,13 @@ public class TeamController {
         }
 
         teamService.update(team);
-        model.addAttribute("teams", teamService.findAll());
-        return "team/teams";
+        return "redirect:/team/";
     }
 
     @GetMapping("delete/{id}")
     public String deleteTeam(@PathVariable("id") long id, Model model) {
         teamService.delete(id);
-        model.addAttribute("teams", teamService.findAll());
-        return "team/teams";
+        return "redirect:/team/";
     }
 
     @GetMapping("/search")
@@ -87,7 +84,6 @@ public class TeamController {
                 model.addAttribute("teams", teamService.findByNameContainingIgnoreCase(searchTerm));
                 break;
         }
-
         return "team/teams";
     }
 }

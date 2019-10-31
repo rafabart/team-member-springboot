@@ -37,8 +37,12 @@ public class MemberController {
 
     @GetMapping("/add")
     public String showNewMember(Member member, Model model) {
-        model.addAttribute("teams", teamService.findAll());
-        return "member/add-member";
+        List<Team> teams = teamService.findAll();
+        if(!teams.isEmpty()){
+            model.addAttribute("teams", teams);
+            return "member/add-member";
+        }
+        return "member/teamEmpty-member";
     }
 
     @PostMapping("/save")
@@ -47,10 +51,8 @@ public class MemberController {
             model.addAttribute("teams", teamService.findAll());
             return "member/add-member";
         }
-
         memberService.save(member);
-        model.addAttribute("members", memberService.findAll());
-        return "member/members";
+        return "redirect:/member/";
     }
 
     @GetMapping("/edit/{id}")
@@ -67,17 +69,14 @@ public class MemberController {
             model.addAttribute("teams", teamService.findAll());
             return "member/update-member";
         }
-
         memberService.update(member);
-        model.addAttribute("members", memberService.findAll());
-        return "member/members";
+        return "redirect:/member/";
     }
 
     @GetMapping("delete/{id}")
     public String deleteMember(@PathVariable("id") long id, Model model) {
         memberService.delete(id);
-        model.addAttribute("members", memberService.findAll());
-        return "member/members";
+        return "redirect:/member";
     }
 
     @GetMapping("/search")
@@ -100,7 +99,6 @@ public class MemberController {
                 model.addAttribute("members", memberService.findByTeamNameContainingIgnoreCase(searchTerm));
                 break;
         }
-
         return "member/members";
     }
 }

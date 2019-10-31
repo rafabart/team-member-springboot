@@ -18,7 +18,7 @@ public class Member extends IdAbstract<Long> {
     private String name;
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(nullable = false)
     private Team team;
 }

@@ -35,7 +35,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:if="${members.empty}"><td colspan="4" align="center">Nenhum time encontrado!</td></tr>
+                    <tr th:if="${members.empty}"><td colspan="7" align="center">Nenhum time encontrado!</td></tr>
                     <tr th:each="member : ${members}">
                         <td th:text="${member.id}"></td>
                         <td th:text="${member.name}"></td>

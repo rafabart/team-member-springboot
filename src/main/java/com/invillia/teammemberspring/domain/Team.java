@@ -2,17 +2,13 @@ package com.invillia.teammemberspring.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 
 @Data
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team extends IdAbstract<Long> {
@@ -22,6 +18,6 @@ public class Team extends IdAbstract<Long> {
     private String name;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "team",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "team",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Member> members;
 }
