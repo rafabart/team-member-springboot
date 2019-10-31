@@ -47,8 +47,7 @@ public class TeamController {
 
     @GetMapping("/edit/{id}")
     public String showEditTeam(@PathVariable("id") long id, Model model) {
-        Team team = teamService.findById(id);
-        model.addAttribute("team", team);
+        model.addAttribute("team", teamService.findById(id));
         return "team/update-team";
     }
 

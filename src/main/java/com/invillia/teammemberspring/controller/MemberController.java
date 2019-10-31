@@ -44,6 +44,7 @@ public class MemberController {
     @PostMapping("/save")
     public String saveMember(@Valid Member member, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("teams", teamService.findAll());
             return "member/add-member";
         }
 
@@ -54,9 +55,8 @@ public class MemberController {
 
     @GetMapping("/edit/{id}")
     public String showEditMember(@PathVariable("id") long id, Model model) {
-        Member member = memberService.findById(id);
         model.addAttribute("teams", teamService.findAll());
-        model.addAttribute("member", member);
+        model.addAttribute("member", memberService.findById(id));
         return "member/update-member";
     }
 
@@ -64,6 +64,7 @@ public class MemberController {
     public String updateMember(@PathVariable("id") long id, @Valid Member member, BindingResult result, Model model) {
         if (result.hasErrors()) {
             member.setId(id);
+            model.addAttribute("teams", teamService.findAll());
             return "member/update-member";
         }
 

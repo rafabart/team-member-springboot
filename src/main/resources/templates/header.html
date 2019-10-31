@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="header">
+
+<head >
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet"/>
+    <link href="/webjars/font-awesome/5.4.1/css/all.min.css" rel="stylesheet"/>
+
+    <!--O Jquery DEVE vir antes do bootstrap na declaração dos scripts-->
+
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Times</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
+    <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item mr-4">
+                <a class="nav-link h4 font-weight-bold" th:href="@{/}">Home</a>
+            </li>
+            <li class="nav-item mr-4">
+                <a class="nav-link h4  font-weight-bold" th:href="@{/team/}">Times</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link h4 font-weight-bold" th:href="@{/member/}">Membros</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+</th:block>
+</body>
+</html>
