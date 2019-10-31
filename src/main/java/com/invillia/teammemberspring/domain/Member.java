@@ -20,6 +20,5 @@ public class Member extends IdAbstract<Long> {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
-//    @NotBlank(message = "O time é obrigatório!")
     private Team team;
 }

@@ -8,12 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/member")
@@ -32,6 +31,7 @@ public class MemberController {
     @GetMapping("/")
     public String findAll(Model model) {
         model.addAttribute("members", memberService.findAll());
+        model.addAttribute("search", "");
         return "member/members";
     }
 
@@ -76,6 +76,30 @@ public class MemberController {
     public String deleteMember(@PathVariable("id") long id, Model model) {
         memberService.delete(id);
         model.addAttribute("members", memberService.findAll());
+        return "member/members";
+    }
+
+    @GetMapping("/search")
+    public String searchMember(@RequestParam("searchTerm") String searchTerm,
+                               @RequestParam("searchType") String searchType,
+                               Model model) {
+
+        switch (searchType) {
+            case "Id":
+                try {
+                    model.addAttribute("members", memberService.findAllById(Long.valueOf(searchTerm)));
+                } catch (Exception e) {
+                    model.addAttribute("members", new ArrayList<Member>());
+                }
+                break;
+            case "Nome":
+                model.addAttribute("members", memberService.findByNameContainingIgnoreCase(searchTerm));
+                break;
+            case "Time":
+                model.addAttribute("members", memberService.findByTeamNameContainingIgnoreCase(searchTerm));
+                break;
+        }
+
         return "member/members";
     }
 }

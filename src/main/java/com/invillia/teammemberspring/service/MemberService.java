@@ -43,4 +43,16 @@ public class MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id).isEmpty() ? null : memberRepository.findById(id).get();
     }
+
+    public List<Member> findByNameContainingIgnoreCase(String name) {
+        return memberRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Member> findByTeamNameContainingIgnoreCase(String teamName) {
+        return memberRepository.findByTeamNameContainingIgnoreCase(teamName);
+    }
+
+    public List<Member> findAllById(Long id) {
+        return memberRepository.findAllById(id);
+    }
 }

@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,7 +26,7 @@ public class TeamController {
     @GetMapping("/")
     public String findAll(Model model) {
         List<Team> teams = teamService.findAll();
-        for (Team t: teams) {
+        for (Team t : teams) {
             System.out.println(t.getMembers());
         }
         model.addAttribute("teams", teamService.findAll());
@@ -74,6 +72,27 @@ public class TeamController {
     public String deleteTeam(@PathVariable("id") long id, Model model) {
         teamService.delete(id);
         model.addAttribute("teams", teamService.findAll());
+        return "team/teams";
+    }
+
+    @GetMapping("/search")
+    public String searchMember(@RequestParam("searchTerm") String searchTerm,
+                               @RequestParam("searchType") String searchType,
+                               Model model) {
+
+        switch (searchType) {
+            case "Id":
+                try {
+                    model.addAttribute("teams", teamService.findAllById(Long.valueOf(searchTerm)));
+                } catch (Exception e) {
+                    model.addAttribute("teams", new ArrayList<Team>());
+                }
+                break;
+            case "Nome":
+                model.addAttribute("teams", teamService.findByNameContainingIgnoreCase(searchTerm));
+                break;
+        }
+
         return "team/teams";
     }
 }

@@ -33,7 +33,6 @@
                             <option th:each="team : ${teams}" th:value="${team.id}"
                                     th:text="${team.name}" >
                             </option>
-
                         </select>
                         <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
                     </div>

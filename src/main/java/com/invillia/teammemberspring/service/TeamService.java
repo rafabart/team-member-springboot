@@ -42,4 +42,12 @@ public class TeamService {
     public Team findById(Long id) {
         return teamRepository.findById(id).isEmpty() ? null : teamRepository.findById(id).get();
     }
+
+    public List<Team> findByNameContainingIgnoreCase(String name) {
+        return teamRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Team> findAllById(Long id) {
+        return teamRepository.findAllById(id);
+    }
 }
