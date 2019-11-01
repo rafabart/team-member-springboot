@@ -1,14 +1,18 @@
 package com.invillia.teammemberspring.controller;
 
 import com.invillia.teammemberspring.domain.Team;
+import com.invillia.teammemberspring.exception.ActionNotPermitedException;
 import com.invillia.teammemberspring.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +29,6 @@ public class TeamController {
 
     @GetMapping("/")
     public String findAll(Model model) {
-        List<Team> teams = teamService.findAll();
         model.addAttribute("teams", teamService.findAll());
         return "team/teams";
     }
@@ -85,5 +88,10 @@ public class TeamController {
                 break;
         }
         return "team/teams";
+    }
+
+    @ExceptionHandler(ActionNotPermitedException.class)
+    public void exceptionHandler(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.NOT_ACCEPTABLE.value(), e.getMessage());
     }
 }

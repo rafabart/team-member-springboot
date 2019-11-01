@@ -2,6 +2,8 @@ package com.invillia.teammemberspring.service;
 
 
 import com.invillia.teammemberspring.domain.Member;
+import com.invillia.teammemberspring.exception.ActionNotPermitedException;
+import com.invillia.teammemberspring.exception.MemberNotFoundException;
 import com.invillia.teammemberspring.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class MemberService {
     }
 
     public void delete(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(String.valueOf(id)));
         memberRepository.deleteById(id);
     }
 
@@ -41,7 +44,7 @@ public class MemberService {
     }
 
     public Member findById(Long id) {
-        return memberRepository.findById(id).isEmpty() ? null : memberRepository.findById(id).get();
+        return memberRepository.findById(id).orElseThrow(() -> new ActionNotPermitedException(String.valueOf(id)));
     }
 
     public List<Member> findByNameContainingIgnoreCase(String name) {
