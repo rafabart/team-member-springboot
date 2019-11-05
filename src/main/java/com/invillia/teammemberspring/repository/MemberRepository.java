@@ -1,17 +1,18 @@
 package com.invillia.teammemberspring.repository;
 
 import com.invillia.teammemberspring.domain.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    List<Member> findByNameContainingIgnoreCase(String name);
+    Page<Member> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    List<Member> findByTeamNameContainingIgnoreCase(String teamName);
+    Page<Member> findByTeamNameContainingIgnoreCase(String teamName, Pageable pageable);
 
-    List<Member> findAllById(Long id);
+    Page<Member> findAllById(Long id, Pageable pageable);
 }

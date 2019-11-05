@@ -9,11 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/team")
@@ -29,46 +29,50 @@ public class TeamController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model,@RequestParam(defaultValue = "0") int page) {
-        model.addAttribute("teams", teamService.findAll(page,teamPerPage));
+    public String findAll(Model model, @RequestParam(defaultValue = "0") int page) {
+        model.addAttribute("teams", teamService.findAll(page, teamPerPage));
         model.addAttribute("currentPage", page);
         return "team/teams";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/addNew")
     public String showNewTeam(Team team) {
-        return "team/add-team";
+        return "team/add-edit-team";
     }
 
     @PostMapping("/save")
-    public String saveTeam(@Valid Team team, BindingResult result, Model model) {
+    public String saveTeam(@Valid Team team, BindingResult result, Model model, RedirectAttributes attr) {
         if (result.hasErrors()) {
-            return "team/add-team";
+            return "team/add-edit-team";
         }
         teamService.save(team);
+        attr.addFlashAttribute("success", "Novo time cadastrado com sucesso!");
         return "redirect:/team/";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/showEdit/{id}")
     public String showEditTeam(@PathVariable("id") long id, Model model) {
         model.addAttribute("team", teamService.findById(id));
-        return "team/update-team";
+        return "team/add-edit-team";
     }
 
     @PostMapping("/update/{id}")
-    public String updateTeam(@PathVariable("id") long id, @Valid Team team, BindingResult result, Model model) {
+    public String updateTeam(@PathVariable("id") long id,
+                             @Valid Team team, BindingResult result, Model model, RedirectAttributes attr) {
         if (result.hasErrors()) {
             team.setId(id);
-            return "team/update-team";
+            return "team/add-edit-team";
         }
 
         teamService.update(team);
+        attr.addFlashAttribute("success", "Time alterado com sucesso!");
         return "redirect:/team/";
     }
 
     @GetMapping("delete/{id}")
-    public String deleteTeam(@PathVariable("id") long id, Model model) {
+    public String deleteTeam(@PathVariable("id") long id, Model model, RedirectAttributes attr) {
         teamService.delete(id);
+        attr.addFlashAttribute("success", "Time excluido com sucesso!");
         return "redirect:/team/";
     }
 
@@ -76,18 +80,22 @@ public class TeamController {
     public String searchMember(@RequestParam("searchTerm") String searchTerm,
                                @RequestParam("searchType") String searchType,
                                @RequestParam(defaultValue = "0") int page,
+                               RedirectAttributes attr,
                                Model model) {
 
         switch (searchType) {
             case "Id":
                 try {
-                    model.addAttribute("teams", teamService.findAllById(Long.valueOf(searchTerm),page,teamPerPage));
+                    model.addAttribute(
+                            "teams", teamService.findAllById(Long.valueOf(searchTerm), page, teamPerPage));
+
                 } catch (Exception e) {
-                    model.addAttribute("teams", new ArrayList<Team>());
+                    model.addAttribute("teams", teamService.findAll(page, teamPerPage));
                 }
                 break;
             case "Nome":
-                model.addAttribute("teams", teamService.findByNameContainingIgnoreCase(searchTerm,page,teamPerPage));
+                model.addAttribute(
+                        "teams", teamService.findByNameContainingIgnoreCase(searchTerm, page, teamPerPage));
                 break;
         }
         model.addAttribute("currentPage", page);

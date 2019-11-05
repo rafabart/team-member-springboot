@@ -7,10 +7,8 @@ import com.invillia.teammemberspring.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -38,7 +36,7 @@ public class TeamService {
     }
 
     public void delete(Long id) {
-        Team team = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException(String.valueOf(id)));
+        Team team = teamRepository.findById(id).orElseThrow(() -> new TeamNotFoundException("ID: " + String.valueOf(id)));
         teamRepository.delete(team);
     }
 
@@ -46,12 +44,12 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public Page<Team> findAll(int page, int size) {
-        return teamRepository.findAll(PageRequest.of(page, size));
-    }
-
     public Team findById(Long id) {
         return teamRepository.findById(id).orElseThrow(() -> new ActionNotPermitedException(String.valueOf(id)));
+    }
+
+    public Page<Team> findAll(int page, int size) {
+        return teamRepository.findAll(PageRequest.of(page, size));
     }
 
     public Page<Team> findByNameContainingIgnoreCase(String name, int page, int size) {
