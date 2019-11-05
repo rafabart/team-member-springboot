@@ -5,8 +5,12 @@ import com.invillia.teammemberspring.exception.ActionNotPermitedException;
 import com.invillia.teammemberspring.exception.TeamNotFoundException;
 import com.invillia.teammemberspring.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -42,15 +46,19 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
+    public Page<Team> findAll(int page, int size) {
+        return teamRepository.findAll(PageRequest.of(page, size));
+    }
+
     public Team findById(Long id) {
         return teamRepository.findById(id).orElseThrow(() -> new ActionNotPermitedException(String.valueOf(id)));
     }
 
-    public List<Team> findByNameContainingIgnoreCase(String name) {
-        return teamRepository.findByNameContainingIgnoreCase(name);
+    public Page<Team> findByNameContainingIgnoreCase(String name, int page, int size) {
+        return teamRepository.findByNameContainingIgnoreCase(name, PageRequest.of(page, size));
     }
 
-    public List<Team> findAllById(Long id) {
-        return teamRepository.findAllById(id);
+    public Page<Team> findAllById(Long id, int page, int size) {
+        return teamRepository.findAllById(id, PageRequest.of(page, size));
     }
 }

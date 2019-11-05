@@ -16,7 +16,8 @@
                                 <option>Nome</option>
                                 <option>Id</option>
                             </select>
-                            <input th:name="searchTerm" type="text" class="form-control" id="search" placeholder="Pesquisar por...">
+                            <input th:name="searchTerm" type="text" class="form-control" id="search"
+                                   placeholder="Pesquisar por...">
                         </div>
                     </form>
                 </div>
@@ -54,6 +55,22 @@
                     </tr>
                     </tbody>
                 </table>
+                <div th:if="${teams.totalPages > 1}">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${teams.number eq 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/team/(page=${teams.number-1})}">&laquo;</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, teams.totalPages-1)}">
+                                <a th:href="@{/team/(page=${i})}" class="page-link" th:text="${i}"
+                                   th:classappend="${i eq teams.number + 1} ? 'active'"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${teams.number + 1 eq teams.totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{/team/(page=${teams.number + 2})}">&raquo;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
             <p class="my-5"><a th:href="@{/team/add}" class="btn btn-primary">Adicionar</i></a></p>
         </div>

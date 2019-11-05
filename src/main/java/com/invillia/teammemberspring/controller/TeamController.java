@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/team")
@@ -22,14 +21,17 @@ public class TeamController {
 
     private TeamService teamService;
 
+    private final int teamPerPage = 5;
+
     @Autowired
     public TeamController(TeamService teamService) {
         this.teamService = teamService;
     }
 
     @GetMapping("/")
-    public String findAll(Model model) {
-        model.addAttribute("teams", teamService.findAll());
+    public String findAll(Model model,@RequestParam(defaultValue = "0") int page) {
+        model.addAttribute("teams", teamService.findAll(page,teamPerPage));
+        model.addAttribute("currentPage", page);
         return "team/teams";
     }
 
@@ -73,20 +75,22 @@ public class TeamController {
     @GetMapping("/search")
     public String searchMember(@RequestParam("searchTerm") String searchTerm,
                                @RequestParam("searchType") String searchType,
+                               @RequestParam(defaultValue = "0") int page,
                                Model model) {
 
         switch (searchType) {
             case "Id":
                 try {
-                    model.addAttribute("teams", teamService.findAllById(Long.valueOf(searchTerm)));
+                    model.addAttribute("teams", teamService.findAllById(Long.valueOf(searchTerm),page,teamPerPage));
                 } catch (Exception e) {
                     model.addAttribute("teams", new ArrayList<Team>());
                 }
                 break;
             case "Nome":
-                model.addAttribute("teams", teamService.findByNameContainingIgnoreCase(searchTerm));
+                model.addAttribute("teams", teamService.findByNameContainingIgnoreCase(searchTerm,page,teamPerPage));
                 break;
         }
+        model.addAttribute("currentPage", page);
         return "team/teams";
     }
 
