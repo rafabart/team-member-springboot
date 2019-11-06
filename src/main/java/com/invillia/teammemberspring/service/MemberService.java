@@ -10,6 +10,7 @@ import com.invillia.teammemberspring.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,27 +44,27 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
-    public Page<Member> findAll(int page, int size) {
+    public Page<Member> findAll(Pageable pageable) {
 
         if (teamRepository.findAll().isEmpty()) {
             throw new TeamNotFoundException("cadastre um time antes de tentar cadastrar um membro!");
         }
-        return memberRepository.findAll(PageRequest.of(page, size));
+        return memberRepository.findAll(pageable);
     }
 
     public Member findById(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new ActionNotPermitedException(String.valueOf(id)));
     }
 
-    public Page<Member> findByNameContainingIgnoreCase(String name, int page, int size) {
-        return memberRepository.findByNameContainingIgnoreCase(name, PageRequest.of(page, size));
+    public Page<Member> findByNameContainingIgnoreCase(String name, Pageable pageable) {
+        return memberRepository.findByNameContainingIgnoreCase(name, pageable);
     }
 
-    public Page<Member> findByTeamNameContainingIgnoreCase(String teamName, int page, int size) {
-        return memberRepository.findByTeamNameContainingIgnoreCase(teamName, PageRequest.of(page, size));
+    public Page<Member> findByTeamNameContainingIgnoreCase(String teamName, Pageable pageable) {
+        return memberRepository.findByTeamNameContainingIgnoreCase(teamName, pageable);
     }
 
-    public Page<Member> findAllById(Long id, int page, int size) {
-        return memberRepository.findAllById(id, PageRequest.of(page, size));
+    public Page<Member> findAllById(Long id, Pageable pageable) {
+        return memberRepository.findAllById(id, pageable);
     }
 }

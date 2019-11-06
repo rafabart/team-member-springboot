@@ -5,6 +5,8 @@ import com.invillia.teammemberspring.exception.ActionNotPermitedException;
 import com.invillia.teammemberspring.service.MemberService;
 import com.invillia.teammemberspring.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,9 +35,8 @@ public class MemberController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model, @RequestParam(defaultValue = "0") int page) {
-        model.addAttribute("members", memberService.findAll(page, teamPerPage));
-        model.addAttribute("currentPage", page);
+    public String findAll(Model model, @PageableDefault(size = 5) Pageable pageable) {
+        model.addAttribute("members", memberService.findAll(pageable));
         return "member/members";
     }
 
@@ -88,28 +89,27 @@ public class MemberController {
     @GetMapping("/search")
     public String searchMember(@RequestParam("searchTerm") String searchTerm,
                                @RequestParam("searchType") String searchType,
-                               @RequestParam(defaultValue = "0") int page,
+                               @PageableDefault(size = 5) Pageable pageable,
                                Model model) {
 
         switch (searchType) {
             case "Id":
                 try {
                     model.addAttribute(
-                            "members", memberService.findAllById(Long.valueOf(searchTerm), page, teamPerPage));
+                            "members", memberService.findAllById(Long.valueOf(searchTerm), pageable));
                 } catch (Exception e) {
-                    model.addAttribute("members", memberService.findAll(page, teamPerPage));
+                    model.addAttribute("members", memberService.findAll(pageable));
                 }
                 break;
             case "Nome":
                 model.addAttribute(
-                        "members", memberService.findByNameContainingIgnoreCase(searchTerm, page, teamPerPage));
+                        "members", memberService.findByNameContainingIgnoreCase(searchTerm, pageable));
                 break;
             case "Time":
                 model.addAttribute("members", memberService.findByTeamNameContainingIgnoreCase(
-                        searchTerm, page, teamPerPage));
+                        searchTerm, pageable));
                 break;
         }
-        model.addAttribute("currentPage", page);
         return "member/members";
     }
 

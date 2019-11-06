@@ -4,6 +4,10 @@ import com.invillia.teammemberspring.domain.Team;
 import com.invillia.teammemberspring.exception.ActionNotPermitedException;
 import com.invillia.teammemberspring.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,17 +25,14 @@ public class TeamController {
 
     private TeamService teamService;
 
-    private final int teamPerPage = 5;
-
     @Autowired
     public TeamController(TeamService teamService) {
         this.teamService = teamService;
     }
 
     @GetMapping("/")
-    public String findAll(Model model, @RequestParam(defaultValue = "0") int page) {
-        model.addAttribute("teams", teamService.findAll(page, teamPerPage));
-        model.addAttribute("currentPage", page);
+    public String findAll(Model model, @PageableDefault(size = 5) Pageable pageable) {
+        model.addAttribute("teams", teamService.findAll(pageable));
         return "team/teams";
     }
 
@@ -79,7 +80,7 @@ public class TeamController {
     @GetMapping("/search")
     public String searchMember(@RequestParam("searchTerm") String searchTerm,
                                @RequestParam("searchType") String searchType,
-                               @RequestParam(defaultValue = "0") int page,
+                               @PageableDefault(size = 5) Pageable pageable,
                                RedirectAttributes attr,
                                Model model) {
 
@@ -87,18 +88,17 @@ public class TeamController {
             case "Id":
                 try {
                     model.addAttribute(
-                            "teams", teamService.findAllById(Long.valueOf(searchTerm), page, teamPerPage));
+                            "teams", teamService.findAllById(Long.valueOf(searchTerm), pageable));
 
                 } catch (Exception e) {
-                    model.addAttribute("teams", teamService.findAll(page, teamPerPage));
+                    model.addAttribute("teams", teamService.findAll(pageable));
                 }
                 break;
             case "Nome":
                 model.addAttribute(
-                        "teams", teamService.findByNameContainingIgnoreCase(searchTerm, page, teamPerPage));
+                        "teams", teamService.findByNameContainingIgnoreCase(searchTerm, pageable));
                 break;
         }
-        model.addAttribute("currentPage", page);
         return "team/teams";
     }
 

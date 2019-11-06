@@ -6,7 +6,7 @@ import com.invillia.teammemberspring.exception.TeamNotFoundException;
 import com.invillia.teammemberspring.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,23 +40,23 @@ public class TeamService {
         teamRepository.delete(team);
     }
 
-    public List<Team> findAll() {
-        return teamRepository.findAll();
-    }
-
     public Team findById(Long id) {
         return teamRepository.findById(id).orElseThrow(() -> new ActionNotPermitedException(String.valueOf(id)));
     }
 
-    public Page<Team> findAll(int page, int size) {
-        return teamRepository.findAll(PageRequest.of(page, size));
+    public List<Team> findAll() {
+        return teamRepository.findAll();
     }
 
-    public Page<Team> findByNameContainingIgnoreCase(String name, int page, int size) {
-        return teamRepository.findByNameContainingIgnoreCase(name, PageRequest.of(page, size));
+    public Page<Team> findAll(Pageable pageable) {
+        return teamRepository.findAll(pageable);
     }
 
-    public Page<Team> findAllById(Long id, int page, int size) {
-        return teamRepository.findAllById(id, PageRequest.of(page, size));
+    public Page<Team> findByNameContainingIgnoreCase(String name, Pageable pageable) {
+        return teamRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
+
+    public Page<Team> findAllById(Long id, Pageable pageable) {
+        return teamRepository.findAllById(id, pageable);
     }
 }

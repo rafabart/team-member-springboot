@@ -78,7 +78,7 @@
                                    th:classappend="${i eq teams.number + 1} ? 'active'"></a>
                             </li>
                             <li class="page-item" th:classappend="${teams.number + 1 eq teams.totalPages} ? 'disabled'">
-                                <a class="page-link" th:href="@{/team/(page=${teams.number + 2})}">&raquo;</a>
+                                <a class="page-link" th:href="@{/team/(page=${teams.number + 1})}">&raquo;</a>
                             </li>
                         </ul>
                     </nav>
